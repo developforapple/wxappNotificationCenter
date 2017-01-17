@@ -10,17 +10,21 @@ http://www.jianshu.com/p/c83211bd9cf0
 使用时，在需要接收消息的界面注册一个通知名。然后在需要发消息的界面post这个通知名就可以了。可以在多个界面注册同一个通知名。这样就可以1对多发消息。
 
 使用方法：
+
 1：在app.js中引用notification.js
 
-var notificationCenter = require('/utils/notification.js'); //这里请改为你的绝对路径
+    var notificationCenter = require('/utils/notification.js'); //这里请改为你的绝对路径
+
 2：在app.js中添加：
 
-App({
-   onLaunch: function (){
-          this.notificationCenter = notificationCenter.center();
-    },
-    notificationCenter:null,
-})
+    App({
+       onLaunch: function (){
+              this.notificationCenter = notificationCenter.center();
+        },
+        notificationCenter:null,
+    })
+
+
 3: 接收通知的page.js中注册
 PageA.js:
 
@@ -31,11 +35,12 @@ Page({
   },
   didReceviceAnyNotification:function(notification){
     console.log("接收到了通知：",notification);
-
     var _this = notification._this; //不要直接使用 this
     var name = notification.name;
   },
 })
+
+
 4: 发出通知的page.js中
 PageB.js 任意函数
 
