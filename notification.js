@@ -58,24 +58,31 @@ var notificationCenter = {
     post:function(name,notification){
         if (!name) return;
 
-        console.log("准备发出通知：",name,notification);
+        console.log("准备发出通知：",name);
 
-        var center = this.notificationCenter;
-        var objects = center[name];
-        if (!objects){
-            objects = [];
+        var objects = this.notificationCenter[name];
+        if (!objects || objects.length == 0){
+            return;
         }
+        if(!notification){
+            notification = {};
+        }
+        notification.name = name;
         objects.forEach(function(object){
-            var observer = object.observer;
-            var action = object.action;
-            var func = object.func;
-
-            if (observer && action){
-                func = observer[action];
+            if (object.observer){
+                var func;
+                if (object.action){
+                    func = object.observer[object.action];
+                }
+                if (!func){
+                    func = object.func;
+                }
+                if (func){
+                    notification._this = object.observer;
+                    func(notification);
+                }
             }
-            func(notification);
         });
-
         console.log("完成向 ",objects.length," 个监听者发出通知：",name);
     }
 }
